@@ -113,12 +113,23 @@
         <div class="content has-text-justified">
           <p>
             I began the project by using the StyleGaussian codebase
-            to train the NeRF synthetic ficus model provided by PhysGaussian model.
-          <!-- </p>
-          <p> -->
+            to train the NeRF synthetic ficus model provided by PhysGaussian project.
             I also walked through its rendering pipeline to understand what
             information is loaded, and how StyleGaussian uses the artistic model and
             a style image to compute new colors for the scene.
+          </p>
+          <p>
+            In essence, what happens is the following: 
+          </p>
+          <div class="content has-text-centered">
+            <img src="./static/images/style_pipeline.png">
+          </div>
+          <p>
+            An extension of the original 3D Gaussian Splatting method, StyleGaussian takes
+            a set of reconstructed 3D Gaussians and embeds VGG features into these 3D Gaussians.
+            With a given style image, the features of the embedded Gaussians are transformed using
+            the style information. The transformed features are then decoded into RGB, giving us
+            the final stylized 3D Gaussians.
           </p>
         </div>
         <!-- Re-rendering. -->
