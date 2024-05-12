@@ -109,29 +109,46 @@
         <h2 class="title is-3">Technical Approach</h2>
 
         <!-- Interpolating. -->
-        <h3 class="title is-4">Style Transfer</h3>
+        <!-- <h3 class="title is-4">Style Transfer (StyleGaussian)</h3> -->
         <div class="content has-text-justified">
           <p>
-            We can also animate the scene by interpolating the deformation latent codes of two input
-            frames. Use the slider here to linearly interpolate between the left frame and the right
-            frame.
+            I began the project by using the StyleGaussian codebase
+            to train the NeRF synthetic ficus model provided by PhysGaussian model.
+          <!-- </p>
+          <p> -->
+            I also walked through its rendering pipeline to understand what
+            information is loaded, and how StyleGaussian uses the artistic model and
+            a style image to compute new colors for the scene.
           </p>
         </div>
-        <!--/ Interpolating. -->
-        <h3 class="title is-4">Simulation</h3>
-        <div class="content has-text-justified">
-          <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
-          </p>
-        </div>
-
         <!-- Re-rendering. -->
-        <h3 class="title is-4">Rendering</h3>
+        <!-- <h3 class="title is-4">Simulation and Rendering (PhysGaussian)</h3> -->
         <div class="content has-text-justified">
           <p>
-            Using <span class="dnerf">Nerfies</span>, you can re-render a video from a novel
-            viewpoint such as a stabilized camera by playing back the training deformations.
+            Then, switching over to the PhysGaussian technique, I worked on adapting the
+            simulation-rendering pipeline to accommodate the style transfer.
+          </p>
+          <p>
+            Forking the original PhysGaussian repository, I modified it so that it uses
+            the StyleGaussian codebase as a submodule instead of the original Gaussian
+            Splatting codebase, so that PhysGaussian could use StyleGaussian's methods
+            of restoring and retrieving color information from the artistically-trained
+            model.
+          </p>
+          <p>
+            Within the program that runs the simulation, I extended the Gaussian model
+            loading stage. Instead of loading solely the reconstructed 3D Gaussian model,
+            the program also loads the artistically-trained Gaussian model if allowed,
+            which the program derives the updated color informaiton from.
+          </p>
+          <p>
+            What happens then is, when we run the updated gs-simulation.py, the program
+            reads arguments from the command line, which includes a model path and an
+            optional style image path. If a style image path is detected, then the program
+            loads the reconstruction and artistic models. Using the artistic model and the
+            style image, we compute the overriding color to be used during the rendering
+            process. If this overriding color exists, then we render the scene with the
+            overriding color, instead of computing the spherical harmonics.
           </p>
         </div>
         <!--/ Re-rendering. -->
